@@ -1,0 +1,100 @@
+﻿@* @model TaskManagement.Models.TaskHistory
+
+@{
+    ViewData["Title"] = "Create Task History";
+}
+
+<h2>Create Task History</h2>
+
+<h4>Task History</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div class="form-group">
+                <label asp-for="TaskID" class="control-label"></label>
+                <select asp-for="TaskID" class="form-control" asp-items="Html.GetEnumSelectList<TaskManagement.Models.Task>()"></select>
+                <span asp-validation-for="TaskID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangeType" class="control-label"></label>
+                <input asp-for="ChangeType" class="form-control" />
+                <span asp-validation-for="ChangeType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangeDescription" class="control-label"></label>
+                <input asp-for="ChangeDescription" class="form-control" />
+                <span asp-validation-for="ChangeDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangedAt" class="control-label"></label>
+                <input asp-for="ChangedAt" class="form-control" />
+                <span asp-validation-for="ChangedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangedBy" class="control-label"></label>
+                <input asp-for="ChangedBy" class="form-control" />
+                <span asp-validation-for="ChangedBy" class="text-danger"></span>
+            </div>
+            <!-- Add other fields as necessary -->
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+ *@
+
+ @model TaskManagement.Models.TaskHistory
+
+@{
+    ViewData["Title"] = "Create Task History";
+}
+
+<h2>Create Task History</h2>
+
+<h4>Task History</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div class="form-group">
+                <label asp-for="TaskID" class="control-label"></label>
+                <select asp-for="TaskID" class="form-control" asp-items="ViewBag.TaskID"></select>
+                <span asp-validation-for="TaskID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangeType" class="control-label"></label>
+                <input asp-for="ChangeType" class="form-control" />
+                <span asp-validation-for="ChangeType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangeDescription" class="control-label"></label>
+                <input asp-for="ChangeDescription" class="form-control" />
+                <span asp-validation-for="ChangeDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangedAt" class="control-label"></label>
+                <input asp-for="ChangedAt" class="form-control" />
+                <span asp-validation-for="ChangedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangedBy" class="control-label"></label>
+                <input asp-for="ChangedBy" class="form-control" />
+                <span asp-validation-for="ChangedBy" class="text-danger"></span>
+            </div>
+            <!-- Add other fields as necessary -->
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

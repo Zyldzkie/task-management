@@ -1,0 +1,150 @@
+﻿@model TaskManagement.Models.Project
+
+@{
+    ViewData["Title"] = "Project Details";
+}
+
+<h2>Project Details</h2>
+
+<div class="row">
+    <h4>Project</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProjectName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProjectName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+    </dl>
+</div>
+
+<div class="row">
+    <table id="tasksTable" class="display">
+        <thead>
+            <tr>
+                <th>TaskID</th>
+                <th>TaskName</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>DueDate</th>
+                <th>Active</th>
+                <th>CreatedBy</th>
+                <th>CreatedAt</th>
+                <th>UpdatedBy</th>
+                <th>UpdatedAt</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model.Tasks)
+            {
+                <tr>
+                    <td>@task.TaskID</td>
+                    <td>@task.TaskName</td>
+                    <td>@task.Description</td>
+                    <td>@task.Status</td>
+                    <td>@task.Priority</td>
+                    <td>@task.DueDate.ToString("yyyy-MM-dd")</td>
+                    <td>@task.Active</td>
+                    <td>@task.CreatedBy</td>
+                    <td>@task.CreatedAt.ToString("yyyy-MM-dd")</td>
+                    <td>@task.UpdatedBy</td>
+                    <td>@task.UpdatedAt?.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        @*<a asp-action="Edit" asp-route-id="@task.TaskID">Edit</a> |*@
+                        @*<a asp-action="Details" asp-route-id="@task.TaskID">Details</a> |*@
+                        <a asp-action="Delete" asp-route-id="@task.TaskID">Delete</a>   
+                        <button onclick="showPopup('@Url.Action("CreateOrEdit", "Task", new { id = task.TaskID,  projectId = Model.ProjectID })')">Edit Task</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    
+</div>
+
+<div>
+    @if (Context.Session.GetString("RoleName") == "User")
+    {
+        @* If the status is Draft or Rejected, show Submit for approval button *@
+        @if (Model.Status == "Draft" || Model.Status == "Rejected")
+        {
+            <form asp-action="ForApproval" asp-route-id="@Model.ProjectID" method="post">
+                <button type="submit" class="btn btn-danger btn-sm delete-link">Submit for approval</button>
+            </form>
+        }
+        else
+        {
+            <a asp-action="Details" asp-route-id="@Model.ProjectID" class="btn btn-primary">Details</a>
+        }
+    }
+    else if (Context.Session.GetString("RoleName") == "Manager")
+    {
+        @if (Model.Status == "For Approval")
+        {
+            <form asp-action="Approve" asp-route-id="@Model.ProjectID" method="post">
+                <button type="submit" class="btn btn-success btn-sm">Approve Project</button>
+            </form>
+            <form asp-action="Reject" asp-route-id="@Model.ProjectID" method="post">
+                <button type="submit" class="btn btn-danger btn-sm">Reject Project</button>
+            </form>
+        }
+    }
+    <a asp-action="Index">Back to List</a>
+    <button onclick="showPopup('@Url.Action("CreateOrEdit", "Task", new { projectId = Model.ProjectID })')">Add Task</button>
+
+    <!-- Modal to display pop-up -->
+    <div id="popup-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="popup-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#tasksTable').DataTable();
+        });
+    </script>
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var links = document.querySelectorAll(".delete-link");
+            links.forEach(function(link) {
+                link.addEventListener("click", function(event) {
+                    var confirmation = confirm("Are you sure you want to send for approval this item?");
+                    if (!confirmation) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        function showPopup(url) {
+            $.get(url, function(data) {
+                $('#popup-content').html(data);
+                $('#popup-modal').modal('show');
+            });
+        }
+    </script>
+}

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<TaskManagement.Models.Task>
+
+@{
+    ViewData["Title"] = "Tasks";
+}
+
+<h2>Tasks</h2>
+
+<table id="tasksTable" class="display">
+    <thead>
+        <tr>
+            <th>TaskID</th>
+            <th>TaskName</th>
+            <th>Description</th>
+            <th>Project</th>
+            @*             <th>User</th> *@
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Department</th>
+            <th>DueDate</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.TaskID</td>
+                <td>@task.TaskName</td>
+                <td>@task.Description</td>
+                <td>@task.Project?.ProjectName</td> <!-- Adjust based on your Project class structure -->
+                @*                 <td>@task.User?.Username</td> <!-- Adjust based on your User class structure --> *@
+                <td>@task.Status</td>
+                <td>@task.Priority</td>
+                @*<td>@task.Department</td>*@
+                <td>@task.DueDate.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@task.TaskID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@task.TaskID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@task.TaskID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create">Create New</a>
+
+@section Scripts {
+    @*     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" /> *@
+
+    <script>
+        $(document).ready(function() {
+            $('#tasksTable').DataTable();
+        });
+    </script>
+}

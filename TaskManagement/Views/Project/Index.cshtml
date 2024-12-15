@@ -1,0 +1,124 @@
+﻿@model IEnumerable<TaskManagement.Models.Project>
+
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<h2>Projects</h2>
+
+<div>
+    <form method="get" asp-controller="Project" asp-action="Index">
+        <div class="form-group">
+            <label for="statusFilter">Filter by Status:</label>
+            <select name="statusFilter2" class="form-control" asp-items="ViewBag.StatusFilter"></select>
+            <span class="text-danger"></span>
+
+            Start Created Date: <input type="date" name="startCreatedDate" />
+            End Created Date: <input type="date" name="endCreatedDate" />
+        </div>
+        <input type="submit" value="Search" />
+    </form>
+</div>
+
+<table id="projectTable" class="display">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ProjectID)</th>
+            <th>@Html.DisplayNameFor(model => model.ProjectName)</th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th>@Html.DisplayNameFor(model => model.Status)</th>
+            <th>@Html.DisplayNameFor(model => model.Department)</th>
+            <th>@Html.DisplayNameFor(model => model.SubmittedBy)</th>
+            <th>@Html.DisplayNameFor(model => model.RejectedBy)</th>
+            <th>@Html.DisplayNameFor(model => model.ApprovedBy)</th>
+            <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
+            <th>@Html.DisplayNameFor(model => model.CreatedBy)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            @* Kung ang role ay User *@
+            @if (Context.Session.GetString("RoleName") == "User")
+            {
+                @* Kung ang status ay Rejected o Draft, hindi ko gagalawin ang buttons *@
+                if (item.Status == "Rejected" || item.Status == "Draft")
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.ProjectID)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ProjectName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                        <td>@Html.DisplayFor(modelItem => item.SubmittedBy)</td>
+                        <td>@Html.DisplayFor(modelItem => item.RejectedBy)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ApprovedBy)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.ProjectID">Details</a> |
+                            @* Ipakita ang ibang buttons kapag Draft o Rejected *@
+                            <a asp-action="Edit" asp-route-id="@item.ProjectID">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ProjectID">Delete</a> |
+                            <a asp-action="Create" asp-controller="Task">Add task</a>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.ProjectID)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ProjectName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                        <td>@Html.DisplayFor(modelItem => item.SubmittedBy)</td>
+                        <td>@Html.DisplayFor(modelItem => item.RejectedBy)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ApprovedBy)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.ProjectID">Details</a>
+                            @* Pag hindi Rejected o Draft, Details lang ang ipapakita *@
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ProjectID)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ProjectName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SubmittedBy)</td>
+                    <td>@Html.DisplayFor(modelItem => item.RejectedBy)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ApprovedBy)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ProjectID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ProjectID">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ProjectID">Delete</a> |
+                        @*<a asp-action="Create" asp-controller="Task">Add task</a>*@
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+<a asp-action="Create">Create New</a>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#projectTable').DataTable();
+        });
+    </script>
+}
+

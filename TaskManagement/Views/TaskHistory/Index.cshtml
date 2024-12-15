@@ -1,0 +1,53 @@
+﻿@model IEnumerable<TaskManagement.Models.TaskHistory>
+
+@{
+    ViewData["Title"] = "Task Histories";
+}
+
+<h2>Task Histories</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Task.TaskName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChangeType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChangeDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChangedAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Task.TaskName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChangeType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChangeDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChangedAt)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.HistoryID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.HistoryID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.HistoryID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create">Create New</a>

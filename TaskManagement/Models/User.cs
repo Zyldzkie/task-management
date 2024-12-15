@@ -18,6 +18,8 @@ namespace TaskManagement.Models
         [Required]
         //public ICollection<Task> Tasks { get; set; }
         public ICollection<TaskAssignment> TaskAssignments { get; set; }
+
+        public bool IsValidated { get; set; } = false;
     }
 }
 
